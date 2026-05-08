@@ -30,7 +30,6 @@ Options:
   -m, --change-mode         Change file mode to 660
   -o, --change-owner        Change file owner to jellyfin:jellyfin (sudo might be needed)
   -p, --path PATH           Output path (move file to the path and then refactor)
-  -s, --separate            Separate movie files in their own folders (not required for TV series)
 
 Example:
   $ jellyfize                                        # start in interactive mode to convert file(s) name
@@ -40,9 +39,8 @@ Example:
   $ jellyfize -d The.Platform.2019.720p.mkv          # dry run
   $ jellyfize -p ~/jelly The.Platform.2019.720p.mkv  # move the file to ~/jelly and convert
   $ jellyfize -m -o -s The.Platform.2019.720p.mkv    # change mode/owner and move the movie file to its own folder
-  $ jellyfize -m -o The.Flash.2014.S01E01.HDTV.mkv   # change mode/owner a TV show file (would be separated in its own folder)
+  $ jellyfize -m -o The.Flash.2014.S01E01.HDTV.mkv   # change mode/owner a TV show file
 ```
 
 ## License
 MIT - see [LICENSE](LICENSE)
-

@@ -240,7 +240,6 @@ Options:
   -m, --change-mode         Change file mode to 660
   -o, --change-owner        Change file owner to jellyfin:jellyfin (sudo might be needed)
   -p, --path PATH           Output path (move file to the path and then refactor)
-  -s, --separate            Separate movie files in their own folders (not required for TV series)
   -n, --rename              Rename the parsed jellyfin directory (good for TV series)
 
 Example:
@@ -251,7 +250,7 @@ Example:
   $ jellyfize -d The.Platform.2019.720p.mkv          # dry run
   $ jellyfize -p ~/jelly The.Platform.2019.720p.mkv  # move the file to ~/jelly and convert
   $ jellyfize -m -o -s The.Platform.2019.720p.mkv    # change mode/owner and move the movie file to its own folder
-  $ jellyfize -m -o The.Flash.2014.S01E01.HDTV.mkv   # change mode/owner a TV show file (would be separated in its own folder)
+  $ jellyfize -m -o The.Flash.2014.S01E01.HDTV.mkv   # change mode/owner a TV show file
   $ jellyfize -m -o -r dc-flash The.Flash.S01E01.mkv # change mode/owner and rename the TV show folder`)
 }
 
@@ -259,8 +258,8 @@ func main() {
 	log.SetFlags(0)
 
 	var (
-		dryRun, chmod, chown, separate bool
-		outDir, renameDir              string
+		dryRun, chmod, chown bool
+		outDir, renameDir    string
 	)
 
 	flag.Usage = usage
@@ -272,8 +271,6 @@ func main() {
 	flag.BoolVar(&chown, "change-owner", false, "Change file owner (default is jellyfin:jellyfin)")
 	flag.StringVar(&outDir, "p", "", "Output path (move file to the path and then refactor)")
 	flag.StringVar(&outDir, "path", "", "Output path (move file to the path and then refactor)")
-	flag.BoolVar(&separate, "s", false, "Separate movie files in their own folders (not required for TV series)")
-	flag.BoolVar(&separate, "separate", false, "Separate movie files in their own folders (not required for TV series)")
 	flag.StringVar(&renameDir, "r", "", "Rename the parsed jellyfin directory (good for TV series)")
 	flag.StringVar(&renameDir, "rename", "", "Rename the parsed jellyfin directory (good for TV series)")
 	flag.Parse()
@@ -282,7 +279,7 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			l := scanner.Text()
-			log.Printf("%s\n", convert(l, true, false, false, "", ""))
+			log.Printf("%s\n", convert(l, true, false, "", ""))
 		}
 		if err := scanner.Err(); err != nil {
 			log.Fatalf("cannot read from stdin: %v\n", err)
@@ -316,7 +313,7 @@ func main() {
 			paths = append(paths, flag.Arg(i))
 		}
 		for _, path := range paths {
-			np := convert(path, dryRun, separate, chown, outDir, renameDir)
+			np := convert(path, dryRun, chown, outDir, renameDir)
 			log.Printf("%s -> %s\n", path, np)
 
 			if !dryRun {
@@ -350,7 +347,7 @@ func main() {
 	}
 }
 
-func convert(path string, dryRun, separate, chown bool, outDir string, renameDir string) (newPath string) {
+func convert(path string, dryRun, chown bool, outDir string, renameDir string) (newPath string) {
 	dir, file := filepath.Split(path)
 	ext := filepath.Ext(file)
 
@@ -367,15 +364,13 @@ func convert(path string, dryRun, separate, chown bool, outDir string, renameDir
 	if outDir != "" {
 		ps[0] = outDir
 	}
-	if separate || pf.mov.season != "" {
-		if renameDir != "" {
-			ps = append(ps, renameDir)
-		} else {
-			ps = append(ps, pf.jellyfinDir())
-		}
-		if !dryRun {
-			makeDir(chown, "cannot make separate movie or TV series folder: %v\n", ps...)
-		}
+	if renameDir != "" {
+		ps = append(ps, renameDir)
+	} else {
+		ps = append(ps, pf.jellyfinDir())
+	}
+	if !dryRun {
+		makeDir(chown, "cannot make movie or TV series folder: %v\n", ps...)
 	}
 	if pf.mov.season != "" {
 		ps = append(ps, pf.seasonDir())
