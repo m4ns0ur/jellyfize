@@ -33,3 +33,4 @@ go.work.sum
 
 # Project files
 jellyfize
+build/
