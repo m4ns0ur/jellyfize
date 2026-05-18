@@ -27,7 +27,7 @@ Usage:
 
 Options:
   -d, --dry-run             Show result without running
-  -m, --change-mode         Change file mode to 660
+  -m, --change-mode         Change file mode to 2660
   -o, --change-owner        Change file owner to jellyfin:jellyfin (sudo might be needed)
   -p, --path PATH           Output path (move file to the path and then refactor)
 

@@ -237,7 +237,7 @@ Usage:
 
 Options:
   -d, --dry-run             Show result without running
-  -m, --change-mode         Change file mode to 660
+  -m, --change-mode         Change file mode to 2660
   -o, --change-owner        Change file owner to jellyfin:jellyfin (sudo might be needed)
   -p, --path PATH           Output path (move file to the path and then refactor)
   -n, --rename              Rename the parsed jellyfin directory (good for TV series)
@@ -265,8 +265,8 @@ func main() {
 	flag.Usage = usage
 	flag.BoolVar(&dryRun, "d", false, "Show result without running")
 	flag.BoolVar(&dryRun, "dry-run", false, "Show result without running")
-	flag.BoolVar(&chmod, "m", false, "Change file mode to 660")
-	flag.BoolVar(&chmod, "change-mode", false, "Change file mode to 660")
+	flag.BoolVar(&chmod, "m", false, "Change file mode to 2660")
+	flag.BoolVar(&chmod, "change-mode", false, "Change file mode to 2660")
 	flag.BoolVar(&chown, "o", false, "Change file owner (default is jellyfin:jellyfin)")
 	flag.BoolVar(&chown, "change-owner", false, "Change file owner (default is jellyfin:jellyfin)")
 	flag.StringVar(&outDir, "p", "", "Output path (move file to the path and then refactor)")
@@ -327,7 +327,7 @@ func main() {
 				}
 
 				if chmod {
-					err := os.Chmod(np, 0660)
+					err := os.Chmod(np, 2660)
 					if err != nil {
 						log.Printf("cannot change the file mode: %v\n", err)
 					}
