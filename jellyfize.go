@@ -327,7 +327,7 @@ func main() {
 				}
 
 				if chmod {
-					err := os.Chmod(np, 2660)
+					err := os.Chmod(np, 0660|os.ModeSticky)
 					if err != nil {
 						log.Printf("cannot change the file mode: %v\n", err)
 					}
@@ -383,7 +383,7 @@ func convert(path string, dryRun, chown bool, outDir string, renameDir string) (
 }
 
 func makeDir(chown bool, errMsg string, ps ...string) {
-	err := os.MkdirAll(filepath.Join(ps...), os.ModePerm)
+	err := os.MkdirAll(filepath.Join(ps...), 0755|os.ModeDir|os.ModeSticky)
 	if err != nil && !os.IsExist(err) {
 		log.Printf(errMsg, err)
 	}
