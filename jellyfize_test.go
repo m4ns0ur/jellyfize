@@ -487,6 +487,10 @@ func TestParse(t *testing.T) {
 			"Alien.Romulus.2024.720P.Web-Dl.H264.Ethel",
 			"Alien Romulus", "2024", "", "", "",
 		},
+		{
+			"Frank.2025_output (video-converter.com)",
+			"Frank", "2025", "", "", "",
+		},
 	}
 
 	for _, tt := range ts {

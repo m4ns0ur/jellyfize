@@ -17,7 +17,7 @@ import (
 var uid int = -1
 var gid int
 
-var toRemove = [...]string{"unknown_release_type", "repack", "readnfo", "hardsub", "hevc", "ensub", "rarbg", "amzn", "pdvT"}
+var toRemove = [...]string{"unknown_release_type", "repack", "readnfo", "hardsub", "hevc", "ensub", "rarbg", "amzn", "pdvT", "_output (video-converter.com)"}
 
 func init() {
 	u, _ := user.Lookup("jellyfin")
